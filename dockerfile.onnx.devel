@@ -1,0 +1,33 @@
+# usage: docker build -f dockerfile.devel -t ruhyadi/vision-fr:devel .
+
+FROM python:3.10-slim
+
+ARG USERNAME=didi
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# create user
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# install debian dependencies
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y --no-install-recommends \
+    curl wget git \
+    && rm -rf /var/lib/apt/lists/*
+
+# install python dependencies
+COPY ./requirements.onnx.devel.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install -r /tmp/requirements.txt
+RUN rm /tmp/requirements.txt
+
+# default user
+USER $USERNAME
+
+# entrypoint
+CMD ["bash"]

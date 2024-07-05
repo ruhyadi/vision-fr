@@ -1,0 +1,28 @@
+{
+    "name": "vision-fr-onnx-devel",
+    "privileged": false,
+    "remoteUser": "didi",
+    "build": {
+        "dockerfile": "../../dockerfile.onnx.devel",
+        "args": { "USERNAME": "didi" }
+    },
+    "workspaceFolder": "/workspace",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "runArgs": [
+        "--shm-size=4g"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "eamodio.gitlens",
+                "redhat.vscode-yaml",
+                "yzhang.markdown-all-in-one",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    }
+}
