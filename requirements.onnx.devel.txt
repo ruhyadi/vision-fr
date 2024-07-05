@@ -25,3 +25,7 @@ asyncpg==0.29.0 # PostgreSQL client
 psycopg2-binary==2.9.9 # PostgreSQL client
 sqlmodel==0.0.18 # SQLModel ORM
 pgvector==0.3.0 # pgvector
+
+# onnx
+opencv-python==4.6.* # image processing
+onnxruntime==1.17.* # ONNX runtime
