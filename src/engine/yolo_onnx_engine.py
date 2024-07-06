@@ -9,8 +9,8 @@ from typing import List
 import cv2
 import numpy as np
 
-from src.schema.yolo_schema import YoloE2EResultSchema, YoloResultSchema
 from src.engine.onnx_engine import CommonOnnxEngine
+from src.schema.yolo_schema import YoloE2EResultSchema, YoloResultSchema
 from src.utils.logger import get_logger
 
 log = get_logger()
@@ -34,7 +34,7 @@ class YoloxOnnxEngine(CommonOnnxEngine):
         self.max_det_end2end = max_det_end2end
 
     def predict(
-        self, imgs: np.ndarray, conf: float = 0.25, nms: float = 0.45
+        self, imgs: List[np.ndarray], conf: float = 0.25, nms: float = 0.45
     ) -> List[YoloResultSchema]:
         """Detect objects from image(s)."""
         imgs, ratios, pads = self.preprocess_imgs(imgs)
@@ -43,7 +43,7 @@ class YoloxOnnxEngine(CommonOnnxEngine):
 
         return results
 
-    def preprocess_imgs(self, imgs: np.ndarray):
+    def preprocess_imgs(self, imgs: List[np.ndarray]):
         """Preprocess images."""
         # resize and pad
         dst_h, dst_w = self.img_shape
