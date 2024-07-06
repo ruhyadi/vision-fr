@@ -24,13 +24,11 @@ class YoloxOnnxEngine(CommonOnnxEngine):
         engine_path: str,
         categories: List[str] = ["face"],
         provider: str = "cpu",
-        end2end: bool = False,
         max_det_end2end: int = 100,
     ) -> None:
         """Initialize YOLO ONNX engine."""
         super().__init__(engine_path, provider)
         self.categories = categories
-        self.end2end = end2end
         self.max_det_end2end = max_det_end2end
 
     def predict(
