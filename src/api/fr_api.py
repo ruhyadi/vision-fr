@@ -5,7 +5,7 @@ import rootutils
 ROOT = rootutils.autosetup()
 
 from datetime import datetime
-from typing import List
+from typing import List, Literal
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from sqlmodel import select
@@ -47,14 +47,14 @@ class FrApi(BaseApi):
             "/face",
             response_model=List[ReadFacesFrSchema],
         )
-        async def list_faces():
+        async def list_faces() -> List[ReadFacesFrSchema]:
             """List all faces."""
             log.log(21, f"Request to list all faces")
             faces = self.pg.session.exec(select(FacesFrSqlSchema)).all()
 
             log.log(21, f"Founds {len(faces)} faces")
 
-            return [ReadFacesFrSchema(**face.to_dict()) for face in faces]
+            return [ReadFacesFrSchema(**face.model_dump(), box=None) for face in faces]
 
         @self.router.post(
             "/face/register",
@@ -65,7 +65,7 @@ class FrApi(BaseApi):
             image: UploadFile = File(...),
             detConf: float = 0.25,
             detNms: float = 0.45,
-        ):
+        ) -> ReadFacesFrSchema:
             """Register a face."""
             log.log(21, f"Request to register a face with name: {name}")
 
@@ -114,4 +114,56 @@ class FrApi(BaseApi):
 
             log.log(21, f"Face registered with id: {face.id}")
 
-            return ReadFacesFrSchema(**face.model_dump())
+            return ReadFacesFrSchema(**face.model_dump(), box=faces.boxes[0])
+
+        @self.router.post(
+            "/face/recognize",
+            response_model=List[ReadFacesFrSchema],
+        )
+        async def recognize_faces(
+            image: UploadFile = File(...),
+            method: Literal["cosine"] = "cosine",
+            distance: float = 0.5,
+            detConf: float = 0.25,
+            detNms: float = 0.45,
+        ) -> List[ReadFacesFrSchema]:
+            """Recognize faces."""
+            log.log(21, f"Request to recognize faces")
+
+            # bytes to numpy
+            img_np = await self.preprocess_img_bytes(await image.read())
+
+            # recognize faces
+            faces = self.engine.predict([img_np], det_conf=detConf, det_nms=detNms)
+            # single batch
+            faces = faces[0]
+
+            # check if face detected
+            if len(faces.boxes) == 0:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="No face detected",
+                )
+
+            # query similar faces
+            results: List[ReadFacesFrSchema] = []
+            for box, embd in zip(faces.boxes, faces.embeddings):
+                # TODO: add more methods
+                if method == "cosine":
+                    responses = self.pg.session.exec(
+                        select(FacesFrSqlSchema)
+                        .filter(FacesFrSqlSchema.embedding.cosine_distance(embd) < distance) 
+                        .limit(1)
+                    ).all()
+                else:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Method not supported",
+                    )
+                response = responses[0] if responses else None
+                if response:
+                    results.append(ReadFacesFrSchema(**response.model_dump(), box=box))
+                else:
+                    results.append(ReadFacesFrSchema(box=box))
+
+            return results
