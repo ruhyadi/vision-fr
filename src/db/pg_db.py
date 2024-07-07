@@ -4,6 +4,7 @@ import rootutils
 
 ROOT = rootutils.autosetup()
 
+from pgvector.psycopg2 import register_vector
 from sqlmodel import Session, SQLModel, create_engine, text
 
 from src.utils.logger import get_logger
@@ -35,6 +36,9 @@ class PgSyncDb:
 
         # test connection
         self.session.exec(text("SELECT 1"))
+
+        # pg vector extension
+        self.session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
 
         log.log(22, f"Connected SQL to {self.host}:{self.port}/{self.db}")
 

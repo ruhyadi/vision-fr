@@ -32,20 +32,22 @@ class BaseApi:
             password=self.cfg.POSTGRES_PASSWORD,
             db=self.cfg.POSTGRES_DB,
         )
+        self.pg.setup()
 
         self.setup()
 
     def setup(self) -> None:
         """Setup the API router."""
 
-        @self.router.on_event("startup")
-        async def startup_event():
-            """Startup event."""
-            log.log(21, f"Load startup event")
-            self.pg.setup()
-            self.pg.create_all()
+        # NOTE: async pg not yet supported
+        # @self.router.on_event("startup")
+        # async def startup_event():
+        #     """Startup event."""
+        #     log.log(21, f"Load startup event")
+        #     self.pg.setup()
+        #     self.pg.create_all()
 
-            log.log(21, f"Startup event complete")
+        #     log.log(21, f"Startup event complete")
 
         @self.router.get("/app")
         async def app():

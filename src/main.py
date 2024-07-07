@@ -15,6 +15,7 @@ def main_api(cfg: Configs) -> None:
     from fastapi import FastAPI
 
     from src.api.base_api import BaseApi
+    from src.api.fr_api import FrApi
     from src.api.server import GunicornServer, UvicornServer
 
     log.info(f"Starting API server on {cfg.API_HOST}:{cfg.API_PORT}")
@@ -29,6 +30,10 @@ def main_api(cfg: Configs) -> None:
     # base api
     base_api = BaseApi(cfg)
     app.include_router(base_api.router)
+
+    # fr api
+    fr_api = FrApi(cfg)
+    app.include_router(fr_api.router, prefix="/fr")
 
     # server
     if cfg.SERVER == "gunicorn":
