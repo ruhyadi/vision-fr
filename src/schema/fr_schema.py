@@ -37,7 +37,7 @@ class FacesFrSqlSchema(SQLModel, table=True):
 class ReadFacesFrSchema(BaseModel):
     """Read faces face recognition schema."""
 
-    # id: int = Field(..., example=1)
+    id: Optional[int] = Field(None, example=1)
     name: str = Field(None, example="John Doe")
     box: Optional[List[int]] = Field(None, example=[0, 0, 100, 100])
     created_at: Optional[datetime] = Field(None)

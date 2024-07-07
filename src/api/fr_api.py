@@ -152,7 +152,9 @@ class FrApi(BaseApi):
                 if method == "cosine":
                     responses = self.pg.session.exec(
                         select(FacesFrSqlSchema)
-                        .filter(FacesFrSqlSchema.embedding.cosine_distance(embd) < distance) 
+                        .filter(
+                            FacesFrSqlSchema.embedding.cosine_distance(embd) < distance
+                        )
                         .limit(1)
                     ).all()
                 else:
@@ -167,3 +169,27 @@ class FrApi(BaseApi):
                     results.append(ReadFacesFrSchema(box=box))
 
             return results
+
+        @self.router.delete(
+            "/face/{id}",
+            status_code=status.HTTP_204_NO_CONTENT,
+        )
+        async def delete_face(id: int):
+            """Delete a face."""
+            log.log(21, f"Request to delete face with id: {id}")
+
+            face = self.pg.session.exec(
+                select(FacesFrSqlSchema).filter(FacesFrSqlSchema.id == id)
+            ).first()
+
+            if not face:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Face not found",
+                )
+
+            self.pg.session.delete(face)
+            self.pg.session.commit()
+
+            log.log(21, f"Face deleted with id: {id}")
+
