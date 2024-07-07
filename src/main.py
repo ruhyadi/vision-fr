@@ -33,7 +33,7 @@ def main_api(cfg: Configs) -> None:
 
     # fr api
     fr_api = FrApi(cfg)
-    app.include_router(fr_api.router, prefix="/fr")
+    app.include_router(fr_api.router, prefix="/api/v1/engine", tags=["face-recognition"])
 
     # server
     if cfg.SERVER == "gunicorn":

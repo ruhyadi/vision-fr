@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import Any, List, Optional
 
 from pgvector.sqlalchemy import Vector
-from pydantic import Field
+from pydantic import BaseModel, Field
 from sqlalchemy import Column
 from sqlmodel import Field as SqlField
 from sqlmodel import SQLModel
@@ -33,3 +33,11 @@ class FacesFrSqlSchema(SQLModel, table=True):
     created_at: datetime = SqlField(...)
     updated_at: datetime = SqlField(...)
 
+
+class ReadFacesFrSchema(BaseModel):
+    """Read faces face recognition schema."""
+
+    id: int = Field(..., example=1)
+    name: str = Field(..., example="John Doe")
+    created_at: datetime = Field(...)
+    updated_at: datetime = Field(...)

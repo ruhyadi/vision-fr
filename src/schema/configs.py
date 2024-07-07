@@ -57,5 +57,11 @@ class Configs(BaseSettings):
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
         )
+    
+    # fr engine
+    FR_DET_ENGINE_PATH: str = None
+    FR_REC_ENGINE_PATH: str = None
+    FR_DET_MAX_END2END: int = 100
+    FR_PROVIDER: Literal["cpu", "gpu"] = "cpu"
 
 cfg = Configs()

@@ -4,8 +4,10 @@ import rootutils
 
 ROOT = rootutils.autosetup()
 
+from io import BytesIO
+
 import numpy as np
-from fastapi import APIRouter, Depends, FastAPI, UploadFile
+from fastapi import APIRouter, Depends, FastAPI
 from PIL import Image
 
 from src.db.pg_db import PgSyncDb
@@ -33,6 +35,7 @@ class BaseApi:
             db=self.cfg.POSTGRES_DB,
         )
         self.pg.setup()
+        self.pg.create_all()
 
         self.setup()
 
@@ -49,7 +52,15 @@ class BaseApi:
 
         #     log.log(21, f"Startup event complete")
 
-        @self.router.get("/app")
-        async def app():
-            """App route."""
-            return {"status": "ok"}
+        pass
+
+    async def preprocess_img_bytes(self, img_bytes: bytes) -> np.ndarray:
+        """Preprocess image bytes."""
+        img = Image.open(BytesIO(img_bytes))
+        img = np.array(img)
+
+        # if PNG, convert to RGB
+        if img.shape[-1] == 4:
+            img = img[..., :3]
+
+        return img
