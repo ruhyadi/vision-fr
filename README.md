@@ -20,15 +20,15 @@ The following models are supported in this repository:
 
 ### Face Detection
 
-| Model Name   | Description                                                                                  | Input Shape       | Output Shape                               | Link             |
-| ------------ | -------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------ | ---------------- |
-| YOLOx s face | YOLOx small model for face detection. Trained on WIDER FACE dataset. **ONNX NMS supported**. | (-1, 3, 640, 640) | (`num_dets`, `boxes`, `classes`, `scores`) | yoloxs_face.onnx |
+| Model Name   | Description                                                                                  | Input Shape       | Output Shape                               | Link                                                                                               |
+| ------------ | -------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| YOLOx s face | YOLOx small model for face detection. Trained on WIDER FACE dataset. **ONNX NMS supported**. | (-1, 3, 640, 640) | (`num_dets`, `boxes`, `classes`, `scores`) | [yoloxs_face.onnx](https://github.com/ruhyadi/vision-fr/releases/download/v1.0.0/yoloxs_face.onnx) |
 
 ### Face Recognition
 
-| Model Name    | Description                                                                                                                                                            | Input Shape       | Output Shape | Link           |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | -------------- |
-| MobileFaceNet | MobileFaceNet model for face recognition. Trained on WebFace600K. Official model from [InsightFace](https://github.com/deepinsight/insightface/tree/master/model_zoo). | (-1, 3, 112, 112) | (-1, 512)    | w600k_mbf.onnx |
+| Model Name    | Description                                                                                                                                                            | Input Shape       | Output Shape | Link                                                                                           |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| MobileFaceNet | MobileFaceNet model for face recognition. Trained on WebFace600K. Official model from [InsightFace](https://github.com/deepinsight/insightface/tree/master/model_zoo). | (-1, 3, 112, 112) | (-1, 512)    | [w600k_mbf.onnx](https://github.com/ruhyadi/vision-fr/releases/download/v1.0.0/w600k_mbf.onnx) |
 
 ## Getting Started
 
