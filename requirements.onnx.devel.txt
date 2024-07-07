@@ -27,5 +27,6 @@ sqlmodel==0.0.18 # SQLModel ORM
 pgvector==0.3.0 # pgvector
 
 # onnx
-opencv-python==4.6.* # image processing
+opencv-python-headless==4.9.* # image processing
+numpy==1.26.* # numerical computing
 onnxruntime==1.17.* # ONNX runtime
