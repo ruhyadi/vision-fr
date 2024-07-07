@@ -28,5 +28,6 @@ pgvector==0.3.0 # pgvector
 
 # onnx
 opencv-python-headless==4.9.* # image processing
+pillow==10.* # image processing
 numpy==1.26.* # numerical computing
 onnxruntime==1.17.* # ONNX runtime

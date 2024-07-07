@@ -37,6 +37,7 @@ class Configs(BaseSettings):
     API_JWT_EXPIRE: int = 3600
     API_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = []
     ENVIRONMENT: Literal["devel", "prod"] = "devel"
+    SERVER: Literal["uvicorn", "gunicorn"] = "uvicorn"
 
     # postgres settings
     POSTGRES_HOST: str = "vision-fr-pg"
