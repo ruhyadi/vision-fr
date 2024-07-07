@@ -1,0 +1,48 @@
+services:
+  vision-fr-api:
+    container_name: vision-fr-api
+    image: ruhyadi/vision-fr:latest
+    depends_on:
+      - vision-fr-postgres
+    restart: always
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=7030
+      - SERVER=uvicorn
+      - POSTGRES_HOST=vision-fr-postgres
+      - POSTGRES_PORT=7031
+      - POSTGRES_USER=didi
+      - POSTGRES_PASSWORD=didi123
+      - POSTGRES_DB=vision-fr
+      - FR_DET_ENGINE_PATH=assets/yoloxs_face.onnx
+      - FR_REC_ENGINE_PATH=assets/w600k_mbf.onnx
+      - FR_DET_MAX_END2END=100
+      - FR_PROVIDER=cpu
+    ports:
+      - ${API_PORT}:${API_PORT}
+    command: python src/main.py
+    networks:
+      - vision-fr-network
+
+  vision-fr-postgres:
+    container_name: vision-fr-postgres
+    image: pgvector/pgvector:pg16
+    restart: always
+    environment:
+      - POSTGRES_PORT=7031
+      - POSTGRES_USER=didi
+      - POSTGRES_PASSWORD=didi123
+      - POSTGRES_DB=vision-fr
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - ./assets/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/postgres:/var/lib/postgresql/data
+    command: -p ${POSTGRES_PORT}
+    networks:
+      - vision-fr-network
+
+networks:
+  vision-fr-network:
+    name: vision-fr-network
+    driver: bridge

@@ -1,0 +1,31 @@
+# usage: pip install -r requirements.onnx.prod.txt
+
+# base
+rootutils==1.0.7 # path management
+colorlog==6.7.0 # logging with colors
+tqdm==4.66.0 # progress bar
+python-dotenv==1.0.0 # .env file support
+pydantic==2.7.* # data validation
+pydantic-settings==2.2.1 # env configs
+
+# rest api
+fastapi==0.111.0 # REST API framework
+requests==2.31.0 # HTTP requests
+uvicorn==0.29.0 # ASGI server
+gunicorn==22.0.0 # WSGI server
+python-multipart==0.0.9 # multipart/form-data support
+passlib==1.7.4 # password hashing
+python-jose==3.3.0 # JWT encoding/decoding
+
+# database
+SQLAlchemy==2.0.* # ORM for SQL databases
+asyncpg==0.29.0 # PostgreSQL client
+psycopg2-binary==2.9.9 # PostgreSQL client
+sqlmodel==0.0.18 # SQLModel ORM
+pgvector==0.3.0 # pgvector
+
+# onnx
+opencv-python-headless==4.9.* # image processing
+pillow==10.* # image processing
+numpy==1.26.* # numerical computing
+onnxruntime==1.17.* # ONNX runtime

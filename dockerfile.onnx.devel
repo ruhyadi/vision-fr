@@ -1,4 +1,4 @@
-# usage: docker build -f dockerfile.devel -t ruhyadi/vision-fr:devel .
+# usage: docker build -f dockerfile.onnx.devel -t ruhyadi/vision-fr:devel .
 
 FROM python:3.10-slim
 

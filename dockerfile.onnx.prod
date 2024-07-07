@@ -1,0 +1,26 @@
+# usage: docker build -f dockerfile.onnx.prod -t ruhyadi/vision-fr:v1.0.0 .
+
+FROM python:3.10-slim
+
+# install debian dependencies
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y --no-install-recommends \
+    curl wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# install python dependencies
+COPY ./requirements.onnx.prod.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install -r /tmp/requirements.txt
+RUN rm /tmp/requirements.txt
+
+# copy source code
+COPY . /app
+RUN mkdir -p /app/logs /app/tmp
+
+# default workdir
+WORKDIR /app
+
+# entrypoint
+# CMD ["python /app/src/main.py"]
+CMD ["bash"]
